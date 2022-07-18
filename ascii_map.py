@@ -1,10 +1,10 @@
 import curses
 from rasterio.transform import Affine
 from rasterio import features
-from rasterio.plot import show
 
 stdscr = curses.initscr()
 curses.noecho()
+stdscr.nodelay(True)
 
 cols = curses.COLS
 rows = curses.LINES
@@ -13,12 +13,11 @@ lngRes = (180 - -180) / cols
 latRes = (-90 - 90) / rows
 transform = Affine.translation(-180 - lngRes / 2, 90 - latRes / 2) * Affine.scale(lngRes, latRes) 
 
-import matplotlib.pyplot as plt
 import geopandas as gpd
 import numpy as np
 
 geojson = gpd.read_file("./countries.geojson")
-geom = [(shapes, 37) for (i ,shapes) in enumerate(geojson.geometry)]
+geom = [(shapes, 37) for (_ ,shapes) in enumerate(geojson.geometry)]
 
 rasterized = features.rasterize(
         geom,
@@ -32,8 +31,14 @@ rasterized = features.rasterize(
 
 offset = 0
 while True:
+    #check for escape key
+    c = stdscr.getch()
+    if c == ord('q'):
+        break
+
+    #place map on screen
     stdscr.clear()
-    #plot roster on curses window
+
     for y in range(0, rows):
         for x in range(0, cols):
             try:
@@ -45,6 +50,7 @@ while True:
     stdscr.refresh()
 
 
+    # roll the map forward
     from time import sleep
     sleep(0.02)
 
