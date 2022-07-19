@@ -77,7 +77,7 @@ while True:
 
     # roll the map forward
     from time import sleep
-    sleep(0.06)
+    sleep(0.02)
 
     offset += 1
 
