@@ -17,7 +17,7 @@ import geopandas as gpd
 import numpy as np
 
 geojson = gpd.read_file("./countries.geojson")
-geom = [(shapes, 37) for (_ ,shapes) in enumerate(geojson.geometry)]
+geom = [(shapes, 65) for (_ ,shapes) in enumerate(geojson.geometry)]
 
 rasterized = features.rasterize(
         geom,
@@ -26,7 +26,7 @@ rasterized = features.rasterize(
         out = None,
         transform = transform,
         all_touched = False,
-        default_value = 31,
+        default_value = 37,
         dtype = np.dtype('i'))
 
 offset = 0
@@ -52,7 +52,7 @@ while True:
 
     # roll the map forward
     from time import sleep
-    sleep(0.02)
+    sleep(0.06)
 
     offset += 1
 
